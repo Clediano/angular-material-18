@@ -1,0 +1,56 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav
+    #drawer
+    class="sidenav"
+    fixedInViewport
+    [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+    [mode]="(isHandset$ | async) ? 'over' : 'side'"
+    [opened]="(isHandset$ | async) === false"
+  >
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+      @for (item of rootRoutes; track $index) {
+      <a
+        mat-list-item
+        [routerLink]="item.path"
+        #link="routerLinkActive"
+        routerLinkActive
+        [activated]="link.isActive"
+      >
+        <div class="nav-list-item">
+          @if (item.data && item.data!['icon']) {
+          <mat-icon>{{ item.data!["icon"] }}</mat-icon>
+          }
+          {{ item.title }}
+        </div>
+      </a>
+      }
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button
+        type="button"
+        aria-label="Toggle sidenav"
+        mat-icon-button
+        (click)="drawer.toggle()"
+      >
+        <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
+      </button>
+
+      <button
+        class="theme-switch"
+        type="button"
+        aria-label="Toggle theme"
+        mat-icon-button
+        (click)="toggleTheme()"
+        matTooltip="Toggle theme"
+      >
+        <mat-icon>
+          {{ theme() === "light" ? "light_mode" : "dark_mode" }}
+        </mat-icon>
+      </button>
+    </mat-toolbar>
+    <ng-content></ng-content>
+  </mat-sidenav-content>
+</mat-sidenav-container>
